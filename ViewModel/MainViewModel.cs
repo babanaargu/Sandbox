@@ -33,11 +33,6 @@ namespace AutoShare.ViewModel
 
         GeneralConfigurationModel _generalconfigurationmodel=new GeneralConfigurationModel();
 
-        //public GeneralConfigurationModel Generalconfigurationmodel
-        //{
-        //    get { return _generalconfigurationmodel; }
-        //    set { _generalconfigurationmodel = value; }
-        //}
 
 
         private ObservableCollection<MainModel> _lstObservableCollection=new ObservableCollection<MainModel>();
