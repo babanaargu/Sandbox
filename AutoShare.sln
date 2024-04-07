@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34607.119
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoShare", "AutoShare.csproj", "{AB55AA10-35EC-4204-B921-0B9E243F02D8}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AB55AA10-35EC-4204-B921-0B9E243F02D8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AB55AA10-35EC-4204-B921-0B9E243F02D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AB55AA10-35EC-4204-B921-0B9E243F02D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AB55AA10-35EC-4204-B921-0B9E243F02D8}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {CBAD423D-6D34-480B-BF57-49F704E37A44}
+	EndGlobalSection
+EndGlobal

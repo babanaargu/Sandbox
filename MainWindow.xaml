@@ -1,0 +1,83 @@
+﻿<Window x:Class="AutoShare.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:AutoShare"
+        mc:Ignorable="d"
+        Title="AutoShare" Height="450" Width="800">
+    <Grid>
+        <Grid Margin="10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="40"></RowDefinition>
+                <RowDefinition Height="100"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="100"></RowDefinition>
+            </Grid.RowDefinitions>
+            <!--Import List of Stocks-->
+            <Grid Grid.Row="0" >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="200"/>
+                </Grid.ColumnDefinitions>
+                <TextBox Grid.Column="0" Text="{Binding TextValue,UpdateSourceTrigger=PropertyChanged}"/>
+                <Button Grid.Column="1" Content="Import Stock List" Command="{Binding ImportCommand}"/>
+            </Grid>
+
+            <!--General Configuration Setting -->
+            <Grid Grid.Row="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="50" ></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                </Grid.RowDefinitions>
+                <Grid Grid.Row="0" Margin="0,20,0,0">
+                    <TextBlock Text="General Configuration" FontSize="18"/>
+                </Grid>
+                <Grid Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <!--<TextBlock Grid.Column="0" Margin="0,10,0,0" Text="TimeSpan" FontSize="18"/>-->
+                    <!--<ComboBox x:Name="TimeSpan" Grid.Column="1" Margin="10,0,0,0" Height="30">
+                        <ComboBoxItem>1M</ComboBoxItem>
+                        <ComboBoxItem>5M</ComboBoxItem>
+                        <ComboBoxItem>15M</ComboBoxItem>
+                        <ComboBoxItem>1H</ComboBoxItem>
+                        <ComboBoxItem>1D</ComboBoxItem>
+                    </ComboBox>-->
+                    <Button Grid.Column="3" Command="{Binding StartCommand}" Content="Start Searching"/>
+                </Grid>
+            </Grid>
+
+            <!--List view -->
+            <Grid Grid.Row="2">
+                <ListView Name="listView" ItemsSource="{Binding LstObservableCollection}">
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="stock Name" DisplayMemberBinding="{Binding StockName}" />
+                            <GridViewColumn Header="stochastic Result" DisplayMemberBinding="{Binding StochasticResult}" />
+                            <!-- Add additional columns as needed -->
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+            </Grid>
+
+            <!--Logger-->
+            <Grid Grid.Row="3">
+                <ListBox ItemsSource="{Binding LstGeneralConfigurationModelCollection}">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel>
+                                <TextBlock Text="{Binding LogMessage}" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </Grid>
+        </Grid>
+
+    </Grid>
+</Window>
