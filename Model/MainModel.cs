@@ -26,6 +26,21 @@ namespace AutoShare.Model
 			set { _stochasticResult = value; }
 		}
 
+        private string _stockBuySell;
 
-	}
+        public string StockBuySell
+        {
+            get { return _stockBuySell; }
+            set { _stockBuySell = value; }
+        }
+
+        private string _stockBuySellBackgroundColor;
+
+        public string StockBuySellBackgroundColor
+        {
+            get { return _stockBuySellBackgroundColor; }
+            set { _stockBuySellBackgroundColor = value; }
+        }
+
+    }
 }

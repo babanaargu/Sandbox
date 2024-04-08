@@ -4,18 +4,8 @@ using AutoShare.Helper;
 using AutoShare.Model;
 using Microsoft.Win32;
 using Newtonsoft.Json.Linq;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.DirectoryServices.ActiveDirectory;
 using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
 
 namespace AutoShare.ViewModel
 {
@@ -26,21 +16,32 @@ namespace AutoShare.ViewModel
         public SharePriceModel _sharepriceModel;
         public List<ImportFileModel> _importStockList;
         ImportFileModel importfilemodel;
-        MainModel mainmodel=new MainModel();
+        MainModel mainmodel;
 
+        private LogHelper _logger = new LogHelper();
 
-        
-
-        GeneralConfigurationModel _generalconfigurationmodel=new GeneralConfigurationModel();
-
-
-
-        private ObservableCollection<MainModel> _lstObservableCollection=new ObservableCollection<MainModel>();
-
-        public ObservableCollection<MainModel> LstObservableCollection
+        public LogHelper Logger
         {
-            get { return _lstObservableCollection; }
-            set { _lstObservableCollection = value; }
+            get { return _logger; }
+            set { SetProperty(ref _logger, value); }
+        }
+
+
+        private GeneralConfigurationModel _generalConfigurationModel;
+
+        public GeneralConfigurationModel GeneralConfigurationModel
+        {
+            get { return _generalConfigurationModel; }
+            set { _generalConfigurationModel= value; }
+        }        
+
+
+        private ObservableCollection<MainModel> _stockLstObservableCollection=new ObservableCollection<MainModel>();
+
+        public ObservableCollection<MainModel> StockLstObservableCollection
+        {
+            get { return _stockLstObservableCollection; }
+            set { _stockLstObservableCollection = value; }
         }
 
         private ObservableCollection<GeneralConfigurationModel> _lstGeneralConfigurationModelCollection = new ObservableCollection<GeneralConfigurationModel>();
@@ -59,13 +60,17 @@ namespace AutoShare.ViewModel
             _importStockList = new List<ImportFileModel>();
             importfilemodel=new ImportFileModel(); 
             mainmodel=new MainModel();
-            _generalconfigurationmodel = new GeneralConfigurationModel();
+            _generalConfigurationModel = new GeneralConfigurationModel();
 
+        }
+        private void LogMessage(string message)
+        {
+            Logger.Log(message);
         }
 
         private async void ExecuteImportCommand(object obj)
         {
-            string filePath = null;// "F:\\Baban\\Projects\\StockList.txt";
+            string filePath = null;
 
             OpenFileDialog openFileDialog = new OpenFileDialog
             {
@@ -90,8 +95,9 @@ namespace AutoShare.ViewModel
                 // The user cancelled or closed the dialog
             }
 
-            _generalconfigurationmodel.LogMessage = "Started Importing. Please Wait....";
-            LstGeneralConfigurationModelCollection.Add(_generalconfigurationmodel);
+            GeneralConfigurationModel.FilePath = filePath;
+            LogMessage("Started Importing. Please Wait....");
+
             // Check if the file exists
             if (File.Exists(filePath))
             {
@@ -104,16 +110,15 @@ namespace AutoShare.ViewModel
                     while ((line = sr.ReadLine()) != null)
                     {
                         importfilemodel = new ImportFileModel();
-                        ApiResponse apiResponse = new ApiResponse();                        
-                        var response= await apiResponse.GetStockCodeName(line);
+                        ApiResponse apiResponse = new ApiResponse();
+                        var response = await apiResponse.GetStockCodeName(line);
                         importfilemodel.stockCodeName = ExtractData.GetBetween(response, "nseScriptCode\":\"", "\",\"");
                         importfilemodel.stockUrl = line;
                         _importStockList.Add(importfilemodel);
-                     
+                        LogMessage($"Stock Imported Successfully {importfilemodel.stockUrl}");
                     }
                 }
-                _generalconfigurationmodel.LogMessage = "Stock Imported Successfully";
-                LstGeneralConfigurationModelCollection.Add(_generalconfigurationmodel);
+                LogMessage("Importing Completed....");
 
             }
         }
@@ -154,9 +159,21 @@ namespace AutoShare.ViewModel
                     }
                     mainmodel.StockName = stockdetail.stockCodeName;
                     mainmodel.StochasticResult = getstochasticResult(listName);
-                    LstObservableCollection.Add(mainmodel);
-                    _generalconfigurationmodel.LogMessage = $"Successfully fetched details for {mainmodel.StockName}";
-                    LstGeneralConfigurationModelCollection.Add(_generalconfigurationmodel);
+                    if(mainmodel.StochasticResult<=20)
+                    {
+                        mainmodel.StockBuySell = "BUY";
+                        mainmodel.StockBuySellBackgroundColor = "Green";
+                        StockLstObservableCollection.Add(mainmodel);
+                        LogMessage($"Successfully fetched details for {mainmodel.StockName}");
+                    }
+                    if (mainmodel.StochasticResult>=80)
+                    {
+                        mainmodel.StockBuySell = "SELL";
+                        mainmodel.StockBuySellBackgroundColor = "Red";
+                        StockLstObservableCollection.Add(mainmodel);
+                        LogMessage($"Successfully fetched details for {mainmodel.StockName}");
+                    }
+
                 }
 
 
@@ -165,12 +182,6 @@ namespace AutoShare.ViewModel
             {
 
             }
-
-            //foreach (var res in firstToken[0])
-            //{
-
-            //}
-
 
         }
 

@@ -20,7 +20,7 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="200"/>
                 </Grid.ColumnDefinitions>
-                <TextBox Grid.Column="0" Text="{Binding TextValue,UpdateSourceTrigger=PropertyChanged}"/>
+                <TextBox Grid.Column="0" Text="{Binding GeneralConfigurationModel.FilePath,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"/>
                 <Button Grid.Column="1" Content="Import Stock List" Command="{Binding ImportCommand}"/>
             </Grid>
 
@@ -39,43 +39,38 @@
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <!--<TextBlock Grid.Column="0" Margin="0,10,0,0" Text="TimeSpan" FontSize="18"/>-->
-                    <!--<ComboBox x:Name="TimeSpan" Grid.Column="1" Margin="10,0,0,0" Height="30">
-                        <ComboBoxItem>1M</ComboBoxItem>
-                        <ComboBoxItem>5M</ComboBoxItem>
-                        <ComboBoxItem>15M</ComboBoxItem>
-                        <ComboBoxItem>1H</ComboBoxItem>
-                        <ComboBoxItem>1D</ComboBoxItem>
-                    </ComboBox>-->
+                    </Grid.ColumnDefinitions>                    
                     <Button Grid.Column="3" Command="{Binding StartCommand}" Content="Start Searching"/>
                 </Grid>
             </Grid>
 
             <!--List view -->
             <Grid Grid.Row="2">
-                <ListView Name="listView" ItemsSource="{Binding LstObservableCollection}">
-                    <ListView.View>
-                        <GridView>
-                            <GridViewColumn Header="stock Name" DisplayMemberBinding="{Binding StockName}" />
-                            <GridViewColumn Header="stochastic Result" DisplayMemberBinding="{Binding StochasticResult}" />
-                            <!-- Add additional columns as needed -->
-                        </GridView>
-                    </ListView.View>
-                </ListView>
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <ListView Name="listView" ItemsSource="{Binding StockLstObservableCollection}" Margin="0,0,0,5">
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Header="Stock Name" DisplayMemberBinding="{Binding StockName}" Width="150" />
+                                <GridViewColumn Header="Stochastic Result" DisplayMemberBinding="{Binding StochasticResult}" Width="150" />
+                                <!--<GridViewColumn Header="BUY/SELL" DisplayMemberBinding="{Binding StockBuySell}" Width="150"/>-->
+                                <GridViewColumn Header="BUY/SELL">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding StockBuySell}" Background="{Binding StockBuySellBackgroundColor}"/>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <!-- Add additional columns as needed -->
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                </ScrollViewer>
+                
             </Grid>
 
             <!--Logger-->
-            <Grid Grid.Row="3">
-                <ListBox ItemsSource="{Binding LstGeneralConfigurationModelCollection}">
-                    <ListBox.ItemTemplate>
-                        <DataTemplate>
-                            <StackPanel>
-                                <TextBlock Text="{Binding LogMessage}" />
-                            </StackPanel>
-                        </DataTemplate>
-                    </ListBox.ItemTemplate>
-                </ListBox>
+            <Grid Grid.Row="3">              
+                <ListBox ItemsSource="{Binding Logger.Messages}"/>
             </Grid>
         </Grid>
 

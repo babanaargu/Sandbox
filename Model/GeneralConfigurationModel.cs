@@ -21,7 +21,7 @@ namespace AutoShare.Model
 		public string FilePath
 		{
 			get { return _filePath; }
-			set { _filePath = value; }
+			set {SetProperty(ref _filePath , value); }
 		}
 
 
