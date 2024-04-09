@@ -3,6 +3,7 @@ using AutoShare.Commands;
 using AutoShare.Helper;
 using AutoShare.Model;
 using Microsoft.Win32;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Collections.ObjectModel;
 using System.IO;
@@ -13,6 +14,8 @@ namespace AutoShare.ViewModel
     {
         public BaseCommand StartCommand { get; }
         public BaseCommand ImportCommand { get; }
+        public BaseCommand DeleteCommand { get; }
+
         public SharePriceModel _sharepriceModel;
         public List<ImportFileModel> _importStockList;
         ImportFileModel importfilemodel;
@@ -56,12 +59,22 @@ namespace AutoShare.ViewModel
         {
             StartCommand = new BaseCommand(ExecuteStartCommand);
             ImportCommand = new BaseCommand(ExecuteImportCommand);
+            DeleteCommand = new BaseCommand(ExecuteDeleteCommand);
             _sharepriceModel = new SharePriceModel();
             _importStockList = new List<ImportFileModel>();
             importfilemodel = new ImportFileModel();
             mainmodel = new MainModel();
             _generalConfigurationModel = new GeneralConfigurationModel();
 
+        }
+
+        private void ExecuteDeleteCommand(object obj)
+        {
+            if(StockLstObservableCollection.Count>=1)
+            {
+                StockLstObservableCollection.Clear();
+                Logger.Log("Successfully deleted all stocks");
+            }
         }
 
         private async void ExecuteImportCommand(object obj)
@@ -108,7 +121,9 @@ namespace AutoShare.ViewModel
                         importfilemodel = new ImportFileModel();
                         ApiResponse apiResponse = new ApiResponse();
                         var response = await apiResponse.GetStockCodeName(line);
-                        importfilemodel.stockCodeName = ExtractData.GetBetween(response, "nseScriptCode\":\"", "\",\"");
+                        importfilemodel.stockCodeName = JsonConvert.DeserializeObject<string>("\"" + ExtractData.GetBetween(response, "nseScriptCode\":\"", "\",\"") + "\"");
+                        
+
                         importfilemodel.stockUrl = line;
                         _importStockList.Add(importfilemodel);
                         Logger.Log($"Stock Imported Successfully {importfilemodel.stockUrl}");
@@ -130,59 +145,89 @@ namespace AutoShare.ViewModel
             ApiResponse apiResponse;
             try
             {
-                if (_importStockList.Count <= 0)
-                {
-                    Logger.Log("No data found! Please import");
-                    return;
-                }
 
-                foreach (var stockdetail in _importStockList)
+                if(GeneralConfigurationModel.StartStopSearching== "Start Searching")
                 {
-                    apiResponse = new ApiResponse();
-                    mainmodel = new MainModel();
-                    var result = await apiResponse.GetApi(stockdetail);
-                    if (string.IsNullOrEmpty(result))
+                    if (_importStockList.Count <= 0)
                     {
-                        Logger.Log($"Data not found for {stockdetail.stockCodeName}");
+                        Logger.Log("No data found! Please import");
                         return;
                     }
-                    else
+                    Constant.IsSearchingStopped = false;
+                    GeneralConfigurationModel.StartStopSearching = "Stop Searching";
+                    GeneralConfigurationModel.StartStopSearchingBackgroundColor = "red";
+
+                    foreach (var stockdetail in _importStockList)
                     {
-                        JObject jsonObject = JObject.Parse(result);
-                        var jsonList = jsonObject["candles"];
+                        apiResponse = new ApiResponse();
+                        mainmodel = new MainModel();
 
-                        JArray paramsArray = (JArray)jsonObject["candles"];
-                        List<SharePriceModel> listName = new List<SharePriceModel>();
+                        if (Constant.IsSearchingStopped)
+                            return;
 
-                        foreach (JToken param in jsonList.Reverse().Take(GeneralConfigurationModel.StochInput))
+                        var result = await apiResponse.GetApi(stockdetail);
+                        if (string.IsNullOrEmpty(result))
                         {
-                            _sharepriceModel = new SharePriceModel();
-                            _sharepriceModel.epochDateTime = (long)param[0];
-                            _sharepriceModel.open = (float)param[1];
-                            _sharepriceModel.high = (float)param[2];
-                            _sharepriceModel.low = (float)param[3];
-                            _sharepriceModel.close = (float)param[4];
-                            listName.Add(_sharepriceModel);
-
+                            Logger.Log($"Data not found for {stockdetail.stockCodeName}");
+                            continue;
                         }
-                        mainmodel.StockName = stockdetail.stockCodeName;
-                        mainmodel.StochasticResult = getstochasticResult(listName);
-                        if (mainmodel.StochasticResult <= 20)
+                        else
                         {
-                            mainmodel.StockBuySell = "BUY";
-                            mainmodel.StockBuySellBackgroundColor = "Green";
-                            StockLstObservableCollection.Add(mainmodel);
-                            Logger.Log($"Successfully fetched details for {mainmodel.StockName}");
-                        }
-                        if (mainmodel.StochasticResult >= 80)
-                        {
-                            mainmodel.StockBuySell = "SELL";
-                            mainmodel.StockBuySellBackgroundColor = "Red";
-                            StockLstObservableCollection.Add(mainmodel);
-                            Logger.Log($"Successfully fetched details for {mainmodel.StockName}");
+                            JObject jsonObject = JObject.Parse(result);
+                            var jsonList = jsonObject["candles"];
+
+                            JArray paramsArray = (JArray)jsonObject["candles"];
+                            List<SharePriceModel> listName = new List<SharePriceModel>();
+
+                            foreach (JToken param in jsonList.Reverse().Take(GeneralConfigurationModel.StochInput))
+                            {
+                                _sharepriceModel = new SharePriceModel();
+                                _sharepriceModel.epochDateTime = (long)param[0];
+                                _sharepriceModel.open = (float)param[1];
+                                _sharepriceModel.high = (float)param[2];
+                                _sharepriceModel.low = (float)param[3];
+                                _sharepriceModel.close = (float)param[4];
+                                listName.Add(_sharepriceModel);
+
+                            }
+                            mainmodel.StockName = stockdetail.stockCodeName;
+                            mainmodel.StochasticResult = getstochasticResult(listName);
+                            if (mainmodel.StochasticResult <= 20)
+                            {
+                                mainmodel.StockBuySell = "BUY";
+                                mainmodel.StockBuySellBackgroundColor = "Green";
+                                StockLstObservableCollection.Add(mainmodel);
+                                mainmodel.SerialNumber = StockLstObservableCollection.Count;
+                                Logger.Log($"Successfully fetched details for {mainmodel.StockName}");
+                            }
+                            else if (mainmodel.StochasticResult >= 80)
+                            {
+                                mainmodel.StockBuySell = "SELL";
+                                mainmodel.StockBuySellBackgroundColor = "Red";
+                                StockLstObservableCollection.Add(mainmodel);
+                                mainmodel.SerialNumber = StockLstObservableCollection.Count;
+                                Logger.Log($"Successfully fetched details for {mainmodel.StockName}");
+                            }
+                            else
+                            {
+                                Logger.Log($"Skipping {mainmodel.StockName} stock because result is={mainmodel.StochasticResult}");
+                            }
+                            await Task.Delay(5000);
                         }
                     }
+                    _importStockList.Clear();
+                    Logger.Log("Successfully completed searching");
+
                 }
+                else
+                {
+                    Constant.IsSearchingStopped = true;
+                    GeneralConfigurationModel.StartStopSearching = "Start Searching";
+                    GeneralConfigurationModel.StartStopSearchingBackgroundColor = "green";
+                    Logger.Log("Successfully Stopped searching");
+                }
+
+                
             }
             catch (Exception ex)
             {

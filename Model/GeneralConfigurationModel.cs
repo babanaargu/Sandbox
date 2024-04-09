@@ -32,7 +32,21 @@ namespace AutoShare.Model
 			set {SetProperty(ref _stochInput , value); }
 		}
 
+        private string _StartStopSearching="Start Searching";
 
+        public string StartStopSearching
+        {
+            get { return _StartStopSearching; }
+            set { SetProperty(ref _StartStopSearching, value); }
+        }
 
-	}
+        private string _StartStopSearchingBackgroundColor = "Green";
+
+        public string StartStopSearchingBackgroundColor
+        {
+            get { return _StartStopSearchingBackgroundColor; }
+            set { SetProperty(ref _StartStopSearchingBackgroundColor, value); }
+        }
+
+    }
 }

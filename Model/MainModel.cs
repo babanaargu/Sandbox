@@ -42,5 +42,15 @@ namespace AutoShare.Model
             set { _stockBuySellBackgroundColor = value; }
         }
 
+        
+        private int _serialNumber;
+
+        public int SerialNumber
+        {
+            get { return _serialNumber; }
+            set {SetProperty(ref _serialNumber , value); }
+        }
+
+
     }
 }
