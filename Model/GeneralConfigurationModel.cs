@@ -24,6 +24,15 @@ namespace AutoShare.Model
 			set {SetProperty(ref _filePath , value); }
 		}
 
+		private int _stochInput=14;
+
+		public int StochInput
+        {
+			get { return _stochInput; }
+			set {SetProperty(ref _stochInput , value); }
+		}
+
+
 
 	}
 }

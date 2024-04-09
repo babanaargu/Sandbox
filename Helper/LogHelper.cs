@@ -10,25 +10,14 @@ namespace AutoShare.Helper
 {
     public  class LogHelper
     {
-        //public static void AddLog(string message, ObservableCollection<GeneralConfigurationModel> lstGeneralConfigurationModelCollection)
-        //{
-        //    lstGeneralConfigurationModelCollection.Add(message);
-
-        //}
-
         public ObservableCollection<string> Messages { get; } = new ObservableCollection<string>();
 
         public void Log(string message)
         {
             Messages.Insert(0,$"{DateTime.Now}: {message}");
-            RemoveLast();
+            RemoveIfMoreThan100();
         }
-
-        public void Clear()
-        {
-            Messages.Clear();
-        }
-        public void RemoveLast()
+        public void RemoveIfMoreThan100()
         {
             if (Messages.Count > 100)
             {
