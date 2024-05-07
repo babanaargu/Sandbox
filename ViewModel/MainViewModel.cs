@@ -173,7 +173,7 @@ namespace AutoShare.ViewModel
                         if (Constant.IsSearchingStopped)
                             return;
 
-                        var result = await apiResponse.GetApi(stockdetail);
+                        var result = await apiResponse.GetApi(stockdetail, GeneralConfigurationModel.StockTimeInMinute);
                         if (string.IsNullOrEmpty(result))
                         {
                             Logger.Log($"Data not found for {stockdetail.stockCodeName}");

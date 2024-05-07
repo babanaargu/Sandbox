@@ -30,13 +30,13 @@ namespace AutoShare.ApiResponseHandler
             get { return _logger; }
             set { SetProperty(ref _logger, value); }
         }
-        public async Task<string> GetApi(ImportFileModel stockdetail)
+        public async Task<string> GetApi(ImportFileModel stockdetail, int stockInMinute)
         {
             string apiResponse = null;
             try
             {
                 // Call the method to get data from the API
-                apiResponse = await CallApiAndGetResponse(stockdetail);
+                apiResponse = await CallApiAndGetResponse(stockdetail,stockInMinute);
 
             }
             catch (Exception ex)
@@ -47,7 +47,7 @@ namespace AutoShare.ApiResponseHandler
 
         }
 
-        private async Task<string> CallApiAndGetResponse(ImportFileModel stockdetail)
+        private async Task<string> CallApiAndGetResponse(ImportFileModel stockdetail, int stockInMinute)
         {
             string responseBody = null;
             try
@@ -57,7 +57,7 @@ namespace AutoShare.ApiResponseHandler
                     var startTimeInMilliSeconds = getStartTimeInMilliSeconds();
                     var endTimeInMilliSeconds = getEndTimeInMilliSeconds();
 
-                    string apiUrl = $"https://groww.in/v1/api/charting_service/v2/chart/delayed/exchange/NSE/segment/CASH/{stockdetail.stockCodeName}?endTimeInMillis={endTimeInMilliSeconds}&intervalInMinutes=1440&startTimeInMillis={startTimeInMilliSeconds}";
+                    string apiUrl = $"https://groww.in/v1/api/charting_service/v2/chart/delayed/exchange/NSE/segment/CASH/{stockdetail.stockCodeName}?endTimeInMillis={endTimeInMilliSeconds}&intervalInMinutes={stockInMinute}&startTimeInMillis={startTimeInMilliSeconds}";
                     //Headers
                     client.DefaultRequestHeaders.Host = "groww.in";
                     client.DefaultRequestHeaders.Connection.Add("keep-alive");

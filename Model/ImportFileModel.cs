@@ -12,5 +12,7 @@ namespace AutoShare.Model
         public string stockUrl { get; set; }
         public string stockCodeName { get; set;}
 
+        public string stockInMinute { get; set; }
+
     }
 }

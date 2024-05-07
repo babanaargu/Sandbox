@@ -32,6 +32,14 @@ namespace AutoShare.Model
 			set {SetProperty(ref _stochInput , value); }
 		}
 
+        private int _stockTimeInMinute = 1440;
+
+        public int StockTimeInMinute
+        {
+            get { return _stockTimeInMinute; }
+            set { SetProperty(ref _stockTimeInMinute, value); }
+        }
+
         private string _StartStopSearching="Start Searching";
 
         public string StartStopSearching
