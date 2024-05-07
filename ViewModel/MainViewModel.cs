@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Windows;
 
 namespace AutoShare.ViewModel
 {
@@ -70,11 +71,18 @@ namespace AutoShare.ViewModel
 
         private void ExecuteDeleteCommand(object obj)
         {
-            if(StockLstObservableCollection.Count>=1)
+            MessageBoxResult result = MessageBox.Show("Are you sure you want to delete all stocks?", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+            // If user clicks Yes, remove the item from the collection
+            if (result == MessageBoxResult.Yes)
             {
-                StockLstObservableCollection.Clear();
-                Logger.Log("Successfully deleted all stocks");
+                if (StockLstObservableCollection.Count >= 1)
+                {
+                    StockLstObservableCollection.Clear();
+                    Logger.Log("Successfully deleted all stocks");
+                }
             }
+            
         }
 
         private async void ExecuteImportCommand(object obj)
@@ -217,7 +225,8 @@ namespace AutoShare.ViewModel
                     }
                     _importStockList.Clear();
                     Logger.Log("Successfully completed searching");
-
+                    GeneralConfigurationModel.StartStopSearching = "Start Searching";
+                    GeneralConfigurationModel.StartStopSearchingBackgroundColor = "green";
                 }
                 else
                 {
