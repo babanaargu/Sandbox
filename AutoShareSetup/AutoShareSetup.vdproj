@@ -15,13 +15,13 @@
     {
         "Entry"
         {
-        "MsmKey" = "8:_1F897E2CA05244EF80356AF7E217C561"
+        "MsmKey" = "8:_41EE445ECB1246A6B2BCFD3C719F1F43"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_41EE445ECB1246A6B2BCFD3C719F1F43"
+        "MsmKey" = "8:_9906293D5EA943429BF345D6C4FC118C"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -43,6 +43,14 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+            }
         }
         "Release"
         {
@@ -59,6 +67,14 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+            }
         }
     }
     "Deployable"
@@ -76,13 +92,23 @@
         {
             "LaunchCondition"
             {
+                "{A06ECF26-33A3-4562-8140-9B0E340D4F24}:_71223C483F0E4F66B6E11ABBB3555F1A"
+                {
+                "Name" = "8:.NET Core"
+                "Message" = "8:[VSDNETCOREMSG]"
+                "AllowLaterVersions" = "11:FALSE"
+                "InstallUrl" = "8:https://dotnet.microsoft.com/download/dotnet-core/[NetCoreVerMajorDotMinor]"
+                "IsNETCore" = "11:TRUE"
+                "Architecture" = "2:0"
+                "Runtime" = "2:0"
+                }
             }
         }
         "File"
         {
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_1F897E2CA05244EF80356AF7E217C561"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_9906293D5EA943429BF345D6C4FC118C"
             {
-            "SourcePath" = "8:C:\\Users\\DELL\\OneDrive\\Desktop\\trends_share.ico"
+            "SourcePath" = "8:..\\Resource\\trends_share.ico"
             "TargetName" = "8:trends_share.ico"
             "Tag" = "8:"
             "Folder" = "8:_949331D3139D48DCAB593045EF0389C2"
@@ -277,9 +303,9 @@
         }
         "Shortcut"
         {
-            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_3EF1C12678FF45F1B2D035A98B5D96E3"
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_0DDD73F1893C431BA438E653319679B2"
             {
-            "Name" = "8:Autoshare"
+            "Name" = "8:AutoShare"
             "Arguments" = "8:"
             "Description" = "8:"
             "ShowCmd" = "3:1"
@@ -288,10 +314,10 @@
             "Target" = "8:_41EE445ECB1246A6B2BCFD3C719F1F43"
             "Folder" = "8:_66647C1B34EE486D920A26AE5F5D1A4B"
             "WorkingFolder" = "8:_949331D3139D48DCAB593045EF0389C2"
-            "Icon" = "8:_1F897E2CA05244EF80356AF7E217C561"
+            "Icon" = "8:_9906293D5EA943429BF345D6C4FC118C"
             "Feature" = "8:"
             }
-            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_A2183F6D5178421D8642E14ED1123411"
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_6FE097FC725948DD8487610CCCEC721B"
             {
             "Name" = "8:AutoShare"
             "Arguments" = "8:"
@@ -302,7 +328,7 @@
             "Target" = "8:_41EE445ECB1246A6B2BCFD3C719F1F43"
             "Folder" = "8:_F06EFAEB8AFA49558BCDD66C49361D24"
             "WorkingFolder" = "8:_949331D3139D48DCAB593045EF0389C2"
-            "Icon" = "8:_1F897E2CA05244EF80356AF7E217C561"
+            "Icon" = "8:_9906293D5EA943429BF345D6C4FC118C"
             "Feature" = "8:"
             }
         }
@@ -706,7 +732,7 @@
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_41EE445ECB1246A6B2BCFD3C719F1F43"
             {
-            "SourcePath" = "8:..\\Sandbox\\obj\\Release\\net8.0-windows\\apphost.exe"
+            "SourcePath" = "8:..\\obj\\Debug\\net8.0-windows\\apphost.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_949331D3139D48DCAB593045EF0389C2"

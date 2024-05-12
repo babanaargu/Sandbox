@@ -5,7 +5,7 @@ VisualStudioVersion = 17.9.34607.119
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AutoShare", "AutoShare.csproj", "{AB55AA10-35EC-4204-B921-0B9E243F02D8}"
 EndProject
-Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "AutoShareSetup", "..\AutoShareSetup\AutoShareSetup.vdproj", "{9CAC759D-0161-4006-B45D-0B77651DFB55}"
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "AutoShareSetup", "AutoShareSetup\AutoShareSetup.vdproj", "{68D5E807-30CF-486E-9423-EF46FB6440A2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +17,10 @@ Global
 		{AB55AA10-35EC-4204-B921-0B9E243F02D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AB55AA10-35EC-4204-B921-0B9E243F02D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AB55AA10-35EC-4204-B921-0B9E243F02D8}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9CAC759D-0161-4006-B45D-0B77651DFB55}.Debug|Any CPU.ActiveCfg = Debug
-		{9CAC759D-0161-4006-B45D-0B77651DFB55}.Debug|Any CPU.Build.0 = Debug
-		{9CAC759D-0161-4006-B45D-0B77651DFB55}.Release|Any CPU.ActiveCfg = Release
-		{9CAC759D-0161-4006-B45D-0B77651DFB55}.Release|Any CPU.Build.0 = Release
+		{68D5E807-30CF-486E-9423-EF46FB6440A2}.Debug|Any CPU.ActiveCfg = Debug
+		{68D5E807-30CF-486E-9423-EF46FB6440A2}.Debug|Any CPU.Build.0 = Debug
+		{68D5E807-30CF-486E-9423-EF46FB6440A2}.Release|Any CPU.ActiveCfg = Release
+		{68D5E807-30CF-486E-9423-EF46FB6440A2}.Release|Any CPU.Build.0 = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

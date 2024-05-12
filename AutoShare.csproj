@@ -25,6 +25,7 @@
 
   <ItemGroup>
     <Folder Include="AutoShareSetup\Debug\" />
+    <Folder Include="Resource\" />
   </ItemGroup>
 
 </Project>
