@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Text.RegularExpressions;
 using System.Windows;
 
 namespace AutoShare.ViewModel
@@ -92,7 +93,7 @@ namespace AutoShare.ViewModel
             OpenFileDialog openFileDialog = new OpenFileDialog
             {
                 Title = "Open File",
-                Filter = "Text files (*.txt)|*.txt|All files (*.*)|*.*",
+                Filter = "All files (*.*)|*.*",
                 FilterIndex = 1,
                 RestoreDirectory = true
             };
@@ -116,29 +117,44 @@ namespace AutoShare.ViewModel
             Logger.Log("Started Importing. Please Wait....");
 
             // Check if the file exists
-            if (File.Exists(filePath))
+            try
             {
-                // Open the file for reading
-                using (StreamReader sr = new StreamReader(filePath))
+                if (File.Exists(filePath))
                 {
-                    string line;
-
-                    // Read and display lines from the file until the end of the file is reached
-                    while ((line = sr.ReadLine()) != null)
+                    // Open the file for reading
+                    using (StreamReader sr = new StreamReader(filePath))
                     {
-                        importfilemodel = new ImportFileModel();
-                        ApiResponse apiResponse = new ApiResponse();
-                        var response = await apiResponse.GetStockCodeName(line);
-                        importfilemodel.stockCodeName = JsonConvert.DeserializeObject<string>("\"" + ExtractData.GetBetween(response, "nseScriptCode\":\"", "\",\"") + "\"");
-                        
+                        string line;
 
-                        importfilemodel.stockUrl = line;
-                        _importStockList.Add(importfilemodel);
-                        Logger.Log($"Stock Imported Successfully {importfilemodel.stockUrl}");
+                        // Read and display lines from the file until the end of the file is reached
+                        while ((line = sr.ReadLine()) != null)
+                        {
+                            if (line.Contains("Company Name,Symbol"))
+                                continue;
+                            var stocklistname = line.Split(',');
+                            importfilemodel.stockUrl = "https://groww.in/stocks/" + stocklistname[0].Replace(".", "").Replace(" ","-").ToLower();//Regex.Replace(stocklistname[0], ".", "").Replace(" ","-").ToLower();
+
+                            importfilemodel.stockCodeName = JsonConvert.DeserializeObject<string>("\"" + stocklistname[1] + "\"");
+
+
+                            importfilemodel = new ImportFileModel();
+                            //ApiResponse apiResponse = new ApiResponse();
+                            //line = "https://groww.in/stocks/reliance-industries-ltd";
+                            //var response = await apiResponse.GetStockCodeName(line);
+                            //importfilemodel.stockCodeName = JsonConvert.DeserializeObject<string>("\"" + ExtractData.GetBetween(response, "nseScriptCode\":\"", "\",\"") + "\"");
+
+
+                            //importfilemodel.stockUrl = line;
+                            _importStockList.Add(importfilemodel);
+                        }
                     }
-                }
-                Logger.Log("Importing Completed....");
+                    Logger.Log("Importing Completed....");
 
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Log(ex.Message.ToString());
             }
         }
 
@@ -223,7 +239,7 @@ namespace AutoShare.ViewModel
                             await Task.Delay(5000);
                         }
                     }
-                    _importStockList.Clear();
+                    //_importStockList.Clear();
                     Logger.Log("Successfully completed searching");
                     GeneralConfigurationModel.StartStopSearching = "Start Searching";
                     GeneralConfigurationModel.StartStopSearchingBackgroundColor = "green";
